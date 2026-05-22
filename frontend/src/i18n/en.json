@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Home",
+    "homeDesc": "Overview",
+    "chat": "Chat",
+    "chatDesc": "AI assistant",
+    "diary": "Diary",
+    "diaryDesc": "Mood tracker",
+    "exercises": "Exercises",
+    "exercisesDesc": "Techniques",
+    "library": "Library",
+    "libraryDesc": "Resources",
+    "progress": "Progress",
+    "progressDesc": "Statistics"
+  },
+  "auth": {
+    "login": "Sign in",
+    "register": "Create account",
+    "email": "Email",
+    "password": "Password",
+    "noAccount": "No account?",
+    "hasAccount": "Already have an account?",
+    "loginTitle": "Welcome back",
+    "registerTitle": "Create account"
+  },
+  "chat": {
+    "newSession": "New chat",
+    "placeholder": "Type a message...",
+    "send": "Send",
+    "sessions": "Conversations",
+    "thinking": "Thinking..."
+  },
+  "diary": {
+    "title": "Mood Diary",
+    "newEntry": "New entry",
+    "mood": "Mood",
+    "text": "Entry",
+    "tags": "Tags",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "noEntries": "No entries yet"
+  },
+  "exercises": {
+    "title": "Exercises",
+    "start": "Start",
+    "complete": "Done",
+    "history": "History",
+    "types": {
+      "breathing": "Breathing",
+      "cbt": "CBT",
+      "meditation": "Meditation",
+      "relaxation": "Relaxation"
+    }
+  },
+  "library": {
+    "title": "Library",
+    "search": "Search articles and resources...",
+    "searchBtn": "Search",
+    "noResults": "No results found"
+  },
+  "progress": {
+    "title": "Progress",
+    "moodChart": "Mood chart",
+    "streak": "Day streak",
+    "badges": "Achievements",
+    "days": "days"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "dark": "Dark",
+    "light": "Light",
+    "logout": "Sign out"
+  }
+}

@@ -1,0 +1,15 @@
+export const lightTheme = {
+  '--bg-primary': '#fdf6f0',
+  '--bg-secondary': '#fce7d8',
+  '--bg-card': 'rgba(255, 255, 255, 0.85)',
+  '--bg-sidebar': 'rgba(253, 246, 240, 0.97)',
+  '--accent': '#8b5cf6',
+  '--accent-hover': '#a78bfa',
+  '--accent-subtle': 'rgba(139, 92, 246, 0.1)',
+  '--text-primary': '#1e1b4b',
+  '--text-secondary': '#4c1d95',
+  '--text-muted': '#7c3aed',
+  '--border': 'rgba(139, 92, 246, 0.2)',
+  '--shadow': '0 8px 32px rgba(139, 92, 246, 0.12)',
+  '--blur': 'blur(8px)',
+}

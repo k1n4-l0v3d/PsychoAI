@@ -1,0 +1,13 @@
+# Backend
+backend/dist
+*.env
+
+# Frontend
+frontend/node_modules
+frontend/dist
+
+# Superpowers
+.superpowers/
+
+# OS
+.DS_Store

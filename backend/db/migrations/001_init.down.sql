@@ -1,0 +1,8 @@
+DROP TABLE IF EXISTS resources;
+DROP TABLE IF EXISTS user_exercises;
+DROP TABLE IF EXISTS exercises;
+DROP TABLE IF EXISTS diary_entries;
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS chat_sessions;
+DROP TABLE IF EXISTS users;
+DROP EXTENSION IF EXISTS "pgcrypto";

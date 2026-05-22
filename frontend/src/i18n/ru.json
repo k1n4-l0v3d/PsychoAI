@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Главная",
+    "homeDesc": "Обзор",
+    "chat": "Чат",
+    "chatDesc": "ИИ-ассистент",
+    "diary": "Дневник",
+    "diaryDesc": "Настроение",
+    "exercises": "Упражнения",
+    "exercisesDesc": "Техники",
+    "library": "Библиотека",
+    "libraryDesc": "Ресурсы",
+    "progress": "Прогресс",
+    "progressDesc": "Статистика"
+  },
+  "auth": {
+    "login": "Войти",
+    "register": "Зарегистрироваться",
+    "email": "Email",
+    "password": "Пароль",
+    "noAccount": "Нет аккаунта?",
+    "hasAccount": "Уже есть аккаунт?",
+    "loginTitle": "Добро пожаловать",
+    "registerTitle": "Создать аккаунт"
+  },
+  "chat": {
+    "newSession": "Новая беседа",
+    "placeholder": "Напишите сообщение...",
+    "send": "Отправить",
+    "sessions": "Беседы",
+    "thinking": "Думаю..."
+  },
+  "diary": {
+    "title": "Дневник настроения",
+    "newEntry": "Новая запись",
+    "mood": "Настроение",
+    "text": "Запись",
+    "tags": "Теги",
+    "save": "Сохранить",
+    "edit": "Редактировать",
+    "delete": "Удалить",
+    "noEntries": "Записей пока нет"
+  },
+  "exercises": {
+    "title": "Упражнения",
+    "start": "Начать",
+    "complete": "Выполнено",
+    "history": "История",
+    "types": {
+      "breathing": "Дыхание",
+      "cbt": "КПТ",
+      "meditation": "Медитация",
+      "relaxation": "Релаксация"
+    }
+  },
+  "library": {
+    "title": "Библиотека",
+    "search": "Поиск статей и ресурсов...",
+    "searchBtn": "Найти",
+    "noResults": "Ничего не найдено"
+  },
+  "progress": {
+    "title": "Прогресс",
+    "moodChart": "График настроения",
+    "streak": "Серия дней",
+    "badges": "Достижения",
+    "days": "дней"
+  },
+  "settings": {
+    "title": "Настройки",
+    "language": "Язык",
+    "theme": "Тема",
+    "dark": "Тёмная",
+    "light": "Светлая",
+    "logout": "Выйти"
+  }
+}

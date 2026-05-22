@@ -1,0 +1,15 @@
+export const darkTheme = {
+  '--bg-primary': '#0a0e1a',
+  '--bg-secondary': '#0d1b2e',
+  '--bg-card': 'rgba(13, 27, 46, 0.7)',
+  '--bg-sidebar': 'rgba(10, 14, 26, 0.95)',
+  '--accent': '#6366f1',
+  '--accent-hover': '#818cf8',
+  '--accent-subtle': 'rgba(99, 102, 241, 0.12)',
+  '--text-primary': '#e2e8f0',
+  '--text-secondary': '#94a3b8',
+  '--text-muted': '#475569',
+  '--border': 'rgba(99, 102, 241, 0.15)',
+  '--shadow': '0 8px 32px rgba(0, 0, 0, 0.4)',
+  '--blur': 'blur(12px)',
+}
