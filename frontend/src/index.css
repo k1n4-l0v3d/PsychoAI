@@ -334,6 +334,9 @@ body {
 .exercise-modal-title { font-size: 18px; font-weight: 600; padding-right: 32px }
 .exercise-timer { font-size: 36px; font-weight: 700; color: var(--accent); text-align: center }
 .exercise-cycle-label { font-size: 13px; color: var(--text-secondary); text-align: center; margin-top: 4px }
+.exercise-controls { display: flex; gap: 8px; align-items: center }
+.exercise-play-btn { flex: 1 }
+.exercise-reset-btn { padding: 10px 12px; flex-shrink: 0 }
 .exercise-steps { display: flex; flex-direction: column; gap: 8px }
 .exercise-step {
   display: flex; align-items: flex-start; gap: 10px; padding: 10px;

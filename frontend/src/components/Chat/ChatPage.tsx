@@ -41,6 +41,7 @@ export default function ChatPage() {
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const editInputRef = useRef<HTMLInputElement>(null)
+  const chatInputRef = useRef<HTMLInputElement>(null)
 
   const location = useLocation()
 
@@ -55,6 +56,10 @@ export default function ChatPage() {
       }
     })
   }, [])
+
+  useEffect(() => {
+    if (!streaming) chatInputRef.current?.focus()
+  }, [streaming])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -294,6 +299,7 @@ export default function ChatPage() {
 
         <form className="chat-input-area" onSubmit={(e) => { e.preventDefault(); sendMessage(input) }}>
           <input
+            ref={chatInputRef}
             className="chat-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}

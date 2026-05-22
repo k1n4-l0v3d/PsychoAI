@@ -6,6 +6,7 @@ import api from '../../api/client'
 import { useAuthStore } from '../../store/authStore'
 import ExerciseTimer from '../Exercises/ExerciseTimer'
 import DiaryEntryModal from '../Chat/DiaryEntryModal'
+import TiltCard from './TiltCard'
 
 interface Session { id: string; title: string; created_at: string }
 interface Exercise {
@@ -142,33 +143,33 @@ export default function DashboardPage() {
         )}
       </div>
 
-      <div className="dashboard-stats">
-        <div className="stat-card">
+      <div className="dashboard-stats" style={{ perspective: 800 }}>
+        <TiltCard className="stat-card">
           <div className="stat-label">Настроение / неделя</div>
           <div className="stat-value">
             {progress?.mood_avg_week ? progress.mood_avg_week.toFixed(1) : '–'}
             <span className="stat-value-denom">/10</span>
           </div>
           <div className="stat-sub">средний балл за 7 дней</div>
-        </div>
-        <div className="stat-card">
+        </TiltCard>
+        <TiltCard className="stat-card">
           <div className="stat-label">Упражнений выполнено</div>
           <div className="stat-value">
             {progress?.exercises_count !== undefined ? progress.exercises_count : '–'}
           </div>
           <div className="stat-sub">+{progress?.exercises_week ?? 0} за эту неделю</div>
-        </div>
-        <div className="stat-card">
+        </TiltCard>
+        <TiltCard className="stat-card">
           <div className="stat-label">Записей в дневнике</div>
           <div className="stat-value">
             {progress?.diary_count !== undefined ? progress.diary_count : '–'}
           </div>
           <div className="stat-sub">Последняя: {formatDiaryLast(progress?.diary_last_at ?? null)}</div>
-        </div>
+        </TiltCard>
       </div>
 
-      <div className="dashboard-bottom">
-        <div className="sessions-card">
+      <div className="dashboard-bottom" style={{ perspective: 1000 }}>
+        <TiltCard className="sessions-card" intensity={3}>
           <div className="sessions-card-header">
             <span className="sessions-card-title">💬 Последние беседы</span>
             <button className="sessions-card-link" onClick={() => navigate('/chat')}>
@@ -197,9 +198,9 @@ export default function DashboardPage() {
             <Plus size={14} />
             Начать новую беседу
           </button>
-        </div>
+        </TiltCard>
 
-        <div className="quickstart-card">
+        <TiltCard className="quickstart-card" intensity={3}>
           <div className="quickstart-title">⚡ Быстрый старт</div>
           {QUICK_ACTIONS.map(({ label, slug, color }) => (
             <button
@@ -225,7 +226,7 @@ export default function DashboardPage() {
           >
             📚 Найти статьи
           </button>
-        </div>
+        </TiltCard>
       </div>
 
       <AnimatePresence>

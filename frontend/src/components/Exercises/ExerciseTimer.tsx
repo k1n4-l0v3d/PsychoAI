@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { X, CheckCircle } from 'lucide-react'
+import { X, CheckCircle, Play, Pause, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 interface Exercise {
@@ -29,24 +29,23 @@ export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: P
   const totalCycles = exercise.content.cycles ?? 0
   const isBreathing = !!stepDurations && stepDurations.length === steps.length && totalCycles > 0
 
+  const initialTime = isBreathing ? stepDurations[0] : exercise.duration_sec
+
+  const [running, setRunning] = useState(false)
   const [step, setStep] = useState(0)
   const [cycle, setCycle] = useState(1)
-  // For breathing: countdown per step. For others: countdown total.
-  const [timeLeft, setTimeLeft] = useState(
-    isBreathing ? stepDurations[0] : exercise.duration_sec
-  )
+  const [timeLeft, setTimeLeft] = useState(initialTime)
   const [done, setDone] = useState(false)
 
   useEffect(() => {
-    if (done) return
-    if (timeLeft <= 0) return
+    if (!running || done || timeLeft <= 0) return
     const id = setInterval(() => setTimeLeft((t) => t - 1), 1000)
     return () => clearInterval(id)
-  }, [timeLeft, done])
+  }, [running, timeLeft, done])
 
   // Breathing: advance step/cycle when step timer hits 0
   useEffect(() => {
-    if (!isBreathing || done) return
+    if (!isBreathing || done || !running) return
     if (timeLeft > 0) return
 
     const nextStep = step + 1
@@ -61,6 +60,7 @@ export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: P
         setTimeLeft(stepDurations[0])
       } else {
         setDone(true)
+        setRunning(false)
       }
     }
   }, [timeLeft])
@@ -76,6 +76,14 @@ export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: P
     const newStep = Math.min(Math.floor(elapsed / stepDuration), steps.length - 1)
     setStep(newStep)
   }, [timeLeft])
+
+  const reset = () => {
+    setRunning(false)
+    setDone(false)
+    setStep(0)
+    setCycle(1)
+    setTimeLeft(initialTime)
+  }
 
   const mm = String(Math.floor(timeLeft / 60)).padStart(2, '0')
   const ss = String(timeLeft % 60).padStart(2, '0')
@@ -100,20 +108,20 @@ export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: P
 
         {isBreathing ? (
           <>
-            <div className="exercise-timer">{ss}</div>
+            <div className="exercise-timer" style={{ opacity: running || done ? 1 : 0.35 }}>{ss}</div>
             <div className="exercise-cycle-label">
               {lang === 'ru' ? `Цикл ${cycle} из ${totalCycles}` : `Cycle ${cycle} of ${totalCycles}`}
             </div>
           </>
         ) : exercise.duration_sec > 0 ? (
-          <div className="exercise-timer">{mm}:{ss}</div>
+          <div className="exercise-timer" style={{ opacity: running || done ? 1 : 0.35 }}>{mm}:{ss}</div>
         ) : null}
 
         <div className="exercise-steps">
           {steps.map((s, i) => (
             <div
               key={i}
-              className={`exercise-step ${i === step ? 'exercise-step--active' : ''} ${i < step ? 'exercise-step--done' : ''}`}
+              className={`exercise-step ${running && i === step ? 'exercise-step--active' : ''} ${i < step ? 'exercise-step--done' : ''}`}
             >
               <span className="step-num">{i + 1}</span>
               <span>{lang === 'ru' ? s.ru : s.en}</span>
@@ -121,9 +129,33 @@ export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: P
           ))}
         </div>
 
-        <button className="btn-primary" onClick={onComplete}>
-          <CheckCircle size={16} /> {t('exercises.complete')}
-        </button>
+        <div className="exercise-controls">
+          {!done ? (
+            <>
+              <button className="btn-primary exercise-play-btn" onClick={() => setRunning((r) => !r)}>
+                {running
+                  ? <><Pause size={16} /> Пауза</>
+                  : <><Play size={16} /> {timeLeft === initialTime ? 'Старт' : 'Продолжить'}</>
+                }
+              </button>
+              {timeLeft < initialTime && (
+                <button className="btn-ghost exercise-reset-btn" onClick={reset}>
+                  <RotateCcw size={15} />
+                </button>
+              )}
+            </>
+          ) : (
+            <button className="btn-primary" onClick={onComplete}>
+              <CheckCircle size={16} /> {t('exercises.complete')}
+            </button>
+          )}
+        </div>
+
+        {!done && (
+          <button className="btn-ghost" style={{ fontSize: 13 }} onClick={onComplete}>
+            <CheckCircle size={14} /> {t('exercises.complete')}
+          </button>
+        )}
       </motion.div>
     </motion.div>
   )
