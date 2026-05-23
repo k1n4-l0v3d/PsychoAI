@@ -68,21 +68,23 @@ function BreathingCircle({ running, done, step, cycle, totalCycles, timeLeft, st
   const duration = stepDurations[step] ?? 4
 
   return (
-    <motion.div
-      className={`breathing-circle breathing-circle--${phase}`}
-      animate={{ scale, background }}
-      transition={{ duration, ease: 'easeInOut' }}
-      style={{ opacity: isActive ? 1 : 0.4 }}
-    >
-      <div className="breathing-circle__timer">{String(timeLeft).padStart(2, '0')}</div>
-      {isActive && !done && (
-        <div className="breathing-circle__phase">{PHASE_LABELS[phase]}</div>
-      )}
-      {done && <div className="breathing-circle__phase">Готово ✓</div>}
-      <div className="breathing-circle__cycle">
-        {done ? '' : `Цикл ${cycle} из ${totalCycles}`}
-      </div>
-    </motion.div>
+    <div className="breathing-circle-wrap">
+      <motion.div
+        className={`breathing-circle breathing-circle--${phase}`}
+        animate={{ scale, background }}
+        transition={{ duration, ease: 'easeInOut' }}
+        style={{ opacity: isActive ? 1 : 0.4 }}
+      >
+        <div className="breathing-circle__timer">{String(timeLeft).padStart(2, '0')}</div>
+        {isActive && !done && (
+          <div className="breathing-circle__phase">{PHASE_LABELS[phase]}</div>
+        )}
+        {done && <div className="breathing-circle__phase">Готово ✓</div>}
+        <div className="breathing-circle__cycle">
+          {done ? '' : `Цикл ${cycle} из ${totalCycles}`}
+        </div>
+      </motion.div>
+    </div>
   )
 }
 
