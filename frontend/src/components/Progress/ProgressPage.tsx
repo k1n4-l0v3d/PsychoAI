@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import api from '../../api/client'
+import MoodHeatmap from './MoodHeatmap'
 
 interface DayMood { date: string; avg: number }
 interface Badge { id: string; label: string; icon: string }
@@ -71,6 +72,11 @@ export default function ProgressPage() {
               </LineChart>
             </ResponsiveContainer>
           )}
+        </div>
+
+        <div className="card">
+          <h2 className="card-title">🗓️ Календарь настроения</h2>
+          <MoodHeatmap />
         </div>
 
         {data.badges.length > 0 && (
