@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --bg-primary: #0a0e1a;
-  --bg-secondary: #0d1b2e;
-  --bg-card: rgba(13, 27, 46, 0.7);
-  --bg-sidebar: rgba(10, 14, 26, 0.95);
-  --accent: #6366f1;
-  --accent-hover: #818cf8;
-  --accent-subtle: rgba(99, 102, 241, 0.12);
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
-  --border: rgba(99, 102, 241, 0.15);
-  --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --bg-primary: #252840;
+  --bg-secondary: #2e3256;
+  --bg-card: rgba(46, 50, 86, 0.8);
+  --bg-sidebar: rgba(33, 36, 58, 0.98);
+  --accent: #818cf8;
+  --accent-hover: #a5b4fc;
+  --accent-subtle: rgba(129, 140, 248, 0.12);
+  --text-primary: #e8eaf6;
+  --text-secondary: #9fa8da;
+  --text-muted: #5c6bc0;
+  --border: rgba(129, 140, 248, 0.2);
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   --blur: blur(12px);
 }
 
@@ -404,3 +404,110 @@ input[type=range] { width: 100%; accent-color: var(--accent) }
 ::-webkit-scrollbar-track { background: transparent }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted) }
+
+/* Mood Check-In */
+.mood-checkin {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.mood-checkin__label {
+  font-size: 13px; color: var(--text-secondary);
+}
+.mood-checkin__emojis {
+  display: flex; justify-content: space-between; gap: 6px;
+}
+.mood-checkin__btn {
+  flex: 1; background: transparent; border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 4px; font-size: 20px; cursor: pointer;
+  transition: all 0.15s; display: flex; flex-direction: column;
+  align-items: center; gap: 4px; color: var(--text-muted);
+}
+.mood-checkin__btn:hover { border-color: var(--accent); background: var(--accent-subtle); transform: translateY(-2px) }
+.mood-checkin__btn--active {
+  border-color: var(--accent); background: var(--accent-subtle);
+  color: var(--accent); transform: translateY(-2px);
+}
+.mood-checkin__btn span { font-size: 10px; font-weight: 500 }
+.mood-checkin__saved {
+  font-size: 13px; color: var(--accent); text-align: center; padding: 6px 0;
+}
+
+/* Crisis Support Card */
+.crisis-card {
+  background: linear-gradient(135deg, rgba(239,68,68,0.08) 0%, rgba(239,68,68,0.03) 100%);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px;
+}
+.crisis-card__header {
+  display: flex; align-items: center; gap: 10px;
+}
+.crisis-card__icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(239,68,68,0.15); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.crisis-card__title { font-size: 15px; font-weight: 600; color: var(--text-primary) }
+.crisis-card__desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5 }
+.crisis-card__actions { display: flex; flex-direction: column; gap: 8px }
+.crisis-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s; font-family: inherit; text-decoration: none;
+  border: none;
+}
+.crisis-btn--primary {
+  background: rgba(239,68,68,0.9); color: white;
+}
+.crisis-btn--primary:hover { background: rgba(239,68,68,1); transform: translateY(-1px) }
+.crisis-btn--secondary {
+  background: transparent; border: 1px solid rgba(239,68,68,0.3);
+  color: rgba(239,68,68,0.9);
+}
+.crisis-btn--secondary:hover { background: rgba(239,68,68,0.08) }
+
+/* Sidebar SOS button */
+.sidebar-sos {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 10px; margin: 4px 8px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
+  color: rgba(239,68,68,0.9); cursor: pointer; font-size: 13px; font-weight: 500;
+  transition: all 0.15s; font-family: inherit; text-align: left;
+}
+.sidebar-sos:hover { background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.4) }
+
+/* Mood Heatmap */
+.mood-heatmap { display: flex; flex-direction: column; gap: 16px }
+.mood-heatmap__nav {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mood-heatmap__nav-btn {
+  background: transparent; border: 1px solid var(--border); color: var(--text-secondary);
+  border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: all 0.15s;
+  font-family: inherit;
+}
+.mood-heatmap__nav-btn:hover { border-color: var(--accent); color: var(--accent) }
+.mood-heatmap__month { font-size: 14px; font-weight: 500; color: var(--text-primary) }
+.mood-heatmap__weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 2px;
+}
+.mood-heatmap__weekday { font-size: 11px; color: var(--text-muted); text-align: center; padding: 2px 0 }
+.mood-heatmap__grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+}
+.mood-heatmap__cell {
+  aspect-ratio: 1; border-radius: 6px; background: var(--border);
+  position: relative; cursor: default;
+}
+.mood-heatmap__cell--empty { background: transparent }
+.mood-heatmap__cell--today { outline: 2px solid var(--accent); outline-offset: 1px }
+.mood-heatmap__cell[data-score]::after {
+  content: attr(data-score);
+  position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; font-size: 11px; font-weight: 600; color: white;
+  border-radius: 6px;
+}
+.mood-heatmap__legend {
+  display: flex; align-items: center; gap: 6px; justify-content: flex-end;
+}
+.mood-heatmap__legend-label { font-size: 11px; color: var(--text-muted) }
+.mood-heatmap__legend-cells { display: flex; gap: 3px }
+.mood-heatmap__legend-cell { width: 14px; height: 14px; border-radius: 3px }
