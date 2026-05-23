@@ -400,6 +400,68 @@ body {
 
 input[type=range] { width: 100%; accent-color: var(--accent) }
 
+/* Empty states (onboarding) */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; padding: 24px 16px; text-align: center;
+}
+.empty-state__icon { font-size: 32px; line-height: 1 }
+.empty-state__title { font-size: 14px; font-weight: 600; color: var(--text-primary) }
+.empty-state__desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; max-width: 240px }
+.empty-state__btn {
+  margin-top: 4px; background: var(--accent); color: white; border: none;
+  border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+}
+.empty-state__btn:hover { opacity: 0.85 }
+.onboarding-hint {
+  font-size: 12px; color: var(--text-secondary); background: var(--accent-subtle);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px;
+  margin-bottom: 4px; line-height: 1.5;
+}
+
+/* Reminder Banner */
+.reminder-banner {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  backdrop-filter: var(--blur); border-radius: 12px;
+  padding: 12px 14px; margin-bottom: 4px;
+}
+.reminder-banner__text { flex: 1; font-size: 13px; color: var(--text-primary); line-height: 1.4 }
+.reminder-banner__action {
+  background: var(--accent-subtle); border: 1px solid var(--border);
+  color: var(--accent); border-radius: 7px; padding: 5px 12px;
+  font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit;
+  white-space: nowrap; transition: background 0.15s;
+}
+.reminder-banner__action:hover { background: var(--accent); color: white }
+.reminder-banner__close {
+  background: none; border: none; color: var(--text-muted); cursor: pointer;
+  padding: 4px; display: flex; align-items: center; flex-shrink: 0;
+  transition: color 0.15s;
+}
+.reminder-banner__close:hover { color: var(--text-primary) }
+
+/* Breathing Circle */
+.breathing-circle {
+  width: 200px; height: 200px; border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; margin: 8px auto; border: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+.breathing-circle--inhale { border-color: rgba(56, 189, 248, 0.5) }
+.breathing-circle--hold   { border-color: rgba(139, 92, 246, 0.5) }
+.breathing-circle--exhale { border-color: rgba(34, 197, 94, 0.4) }
+.breathing-circle__timer {
+  font-size: 48px; font-weight: 700; color: var(--text-primary); line-height: 1;
+}
+.breathing-circle__phase {
+  font-size: 14px; font-weight: 500; color: var(--text-secondary);
+}
+.breathing-circle__cycle {
+  font-size: 12px; color: var(--text-muted); margin-top: 2px;
+}
+
 ::-webkit-scrollbar { width: 6px }
 ::-webkit-scrollbar-track { background: transparent }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px }
