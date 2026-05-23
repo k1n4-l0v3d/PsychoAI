@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store/authStore'
 import ExerciseTimer from '../Exercises/ExerciseTimer'
 import DiaryEntryModal from '../Chat/DiaryEntryModal'
 import TiltCard from './TiltCard'
+import MoodCheckIn from './MoodCheckIn'
 
 interface Session { id: string; title: string; created_at: string }
 interface Exercise {
@@ -167,6 +168,13 @@ export default function DashboardPage() {
           <div className="stat-sub">Последняя: {formatDiaryLast(progress?.diary_last_at ?? null)}</div>
         </TiltCard>
       </div>
+
+      <TiltCard className="card" intensity={2} style={{ padding: '20px 24px' }}>
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 14, color: 'var(--text-primary)' }}>
+          🌡️ Трекер настроения
+        </div>
+        <MoodCheckIn />
+      </TiltCard>
 
       <div className="dashboard-bottom" style={{ perspective: 1000 }}>
         <TiltCard className="sessions-card" intensity={3}>
