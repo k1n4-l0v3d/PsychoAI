@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion'
+import ReactMarkdown from 'react-markdown'
 
 interface Message { id: string; role: 'user' | 'assistant'; content: string }
 
 export default function MessageBubble({ message }: { message: Message }) {
+  const isAssistant = message.role === 'assistant'
+
   return (
     <motion.div
       className={`message message--${message.role}`}
@@ -12,9 +15,13 @@ export default function MessageBubble({ message }: { message: Message }) {
       layout
     >
       <div className="message-bubble">
-        {message.content.split('\n').map((line, i, arr) => (
-          <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-        ))}
+        {isAssistant ? (
+          <ReactMarkdown className="md">{message.content}</ReactMarkdown>
+        ) : (
+          message.content.split('\n').map((line, i, arr) => (
+            <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+          ))
+        )}
       </div>
     </motion.div>
   )
