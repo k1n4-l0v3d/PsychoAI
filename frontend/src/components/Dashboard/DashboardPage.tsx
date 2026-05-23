@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Plus } from 'lucide-react'
@@ -90,11 +90,31 @@ export default function DashboardPage() {
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null)
   const [showDiary, setShowDiary] = useState(false)
   const [msgIndex, setMsgIndex] = useState(() => Math.floor(Math.random() * SUPPORT_MESSAGES.length))
+  const [hasMoodToday, setHasMoodToday] = useState(false)
+  const [onboardingDone, setOnboardingDone] = useState(
+    () => !!localStorage.getItem('onboarding_done')
+  )
+  const moodRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     api.get<ProgressData>('/api/progress').then(({ data }) => setProgress(data))
     api.get<Session[]>('/api/sessions').then(({ data }) => setSessions(data.slice(0, 3)))
+    api.get<{ score: number } | null>('/api/mood/today')
+      .then(({ data }) => setHasMoodToday(!!data))
+      .catch(() => {})
   }, [])
+
+  useEffect(() => {
+    if (onboardingDone) return
+    const isNew =
+      sessions.length === 0 &&
+      (progress?.diary_count ?? 0) === 0 &&
+      (progress?.exercises_count ?? 0) === 0
+    if (!isNew && progress !== null) {
+      localStorage.setItem('onboarding_done', '1')
+      setOnboardingDone(true)
+    }
+  }, [progress, sessions])
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -150,9 +170,13 @@ export default function DashboardPage() {
           <div className="stat-label">Настроение / неделя</div>
           <div className="stat-value">
             {progress?.mood_avg_week ? progress.mood_avg_week.toFixed(1) : '–'}
-            <span className="stat-value-denom">/10</span>
+            {progress?.mood_avg_week ? <span className="stat-value-denom">/10</span> : null}
           </div>
-          <div className="stat-sub">средний балл за 7 дней</div>
+          <div className="stat-sub">
+            {progress && !progress.mood_avg_week
+              ? '↓ Отметьте настроение ниже'
+              : 'средний балл за 7 дней'}
+          </div>
         </TiltCard>
         <TiltCard className="stat-card">
           <div className="stat-label">Упражнений выполнено</div>
@@ -187,7 +211,14 @@ export default function DashboardPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {sessions.length === 0 && (
-              <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Бесед пока нет</p>
+              <div className="empty-state">
+                <div className="empty-state__icon">💬</div>
+                <div className="empty-state__title">Поговорите с ИИ-психологом</div>
+                <div className="empty-state__desc">Он поможет разобраться в чувствах и найти опору</div>
+                <button className="empty-state__btn" onClick={openNewChat}>
+                  Начать первую беседу →
+                </button>
+              </div>
             )}
             {sessions.map((s) => (
               <div
@@ -211,6 +242,11 @@ export default function DashboardPage() {
 
         <TiltCard className="quickstart-card" intensity={3}>
           <div className="quickstart-title">⚡ Быстрый старт</div>
+          {!onboardingDone && (
+            <div className="onboarding-hint">
+              👋 Добро пожаловать! Попробуйте одно упражнение или начните беседу с ИИ — это займёт пару минут.
+            </div>
+          )}
           {QUICK_ACTIONS.map(({ label, slug, color }) => (
             <button
               key={slug}
