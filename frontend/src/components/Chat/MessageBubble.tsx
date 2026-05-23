@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
-import ReactMarkdown from 'react-markdown'
+import { marked } from 'marked'
+
+marked.setOptions({ breaks: true })
 
 interface Message { id: string; role: 'user' | 'assistant'; content: string }
 
@@ -16,7 +18,7 @@ export default function MessageBubble({ message }: { message: Message }) {
     >
       <div className="message-bubble">
         {isAssistant ? (
-          <ReactMarkdown className="md">{message.content}</ReactMarkdown>
+          <div className="md" dangerouslySetInnerHTML={{ __html: marked.parse(message.content) as string }} />
         ) : (
           message.content.split('\n').map((line, i, arr) => (
             <span key={i}>{line}{i < arr.length - 1 && <br />}</span>

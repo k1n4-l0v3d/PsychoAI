@@ -75,6 +75,7 @@ func main() {
 
 		r.Get("/api/user", authHandler.GetProfile)
 		r.Put("/api/user", authHandler.UpdateProfile)
+		r.Put("/api/user/password", authHandler.ChangePassword)
 
 		r.Get("/api/sessions", chatHandler.ListSessions)
 		r.Post("/api/sessions", chatHandler.CreateSession)

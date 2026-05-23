@@ -13,6 +13,65 @@ interface ProgressData {
   badges: Badge[]
 }
 
+interface Insight { text: string; trend: 'up' | 'down' | 'neutral' }
+
+const DAY_NAMES = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+
+function computeInsights(chart: DayMood[]): Insight[] {
+  if (chart.length < 2) return []
+  const insights: Insight[] = []
+
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const daysDiff = (iso: string) => Math.floor((today.getTime() - new Date(iso).getTime()) / 86400000)
+
+  const thisWeek = chart.filter(d => daysDiff(d.date) < 7)
+  const lastWeek = chart.filter(d => { const n = daysDiff(d.date); return n >= 7 && n < 14 })
+
+  if (thisWeek.length >= 2 && lastWeek.length >= 2) {
+    const avg = (arr: DayMood[]) => arr.reduce((s, d) => s + d.avg, 0) / arr.length
+    const diff = avg(thisWeek) - avg(lastWeek)
+    if (Math.abs(diff) >= 0.3) {
+      const sign = diff > 0 ? '+' : ''
+      insights.push({
+        text: `На этой неделе настроение ${diff > 0 ? 'лучше' : 'хуже'}, чем на прошлой ${sign}${diff.toFixed(1)} балла`,
+        trend: diff > 0 ? 'up' : 'down',
+      })
+    } else {
+      insights.push({ text: 'Настроение на этой неделе стабильное', trend: 'neutral' })
+    }
+  }
+
+  const byDay: Record<number, number[]> = {}
+  for (const d of chart) {
+    const dow = new Date(d.date).getDay()
+    if (!byDay[dow]) byDay[dow] = []
+    byDay[dow].push(d.avg)
+  }
+  let bestDay = -1, bestAvg = 0
+  for (const [dow, avgs] of Object.entries(byDay)) {
+    if (avgs.length < 2) continue
+    const avg = avgs.reduce((s, v) => s + v, 0) / avgs.length
+    if (avg > bestAvg) { bestAvg = avg; bestDay = Number(dow) }
+  }
+  if (bestDay >= 0) {
+    insights.push({ text: `Лучший день недели — ${DAY_NAMES[bestDay]} (среднее ${bestAvg.toFixed(1)})`, trend: 'neutral' })
+  }
+
+  if (chart.length >= 6 && thisWeek.length < 2) {
+    const last3avg = chart.slice(-3).reduce((s, d) => s + d.avg, 0) / 3
+    const prev3avg = chart.slice(-6, -3).reduce((s, d) => s + d.avg, 0) / 3
+    const diff = last3avg - prev3avg
+    if (Math.abs(diff) >= 0.5) {
+      insights.push({
+        text: diff > 0 ? 'Последние дни настроение улучшается 📈' : 'Последние дни настроение снижается 📉',
+        trend: diff > 0 ? 'up' : 'down',
+      })
+    }
+  }
+
+  return insights
+}
+
 export default function ProgressPage() {
   const { t } = useTranslation()
   const [data, setData] = useState<ProgressData | null>(null)
@@ -73,6 +132,25 @@ export default function ProgressPage() {
             </ResponsiveContainer>
           )}
         </div>
+
+        {(() => {
+          const insights = computeInsights(data.mood_chart)
+          return insights.length > 0 ? (
+            <div className="card mood-insights-card">
+              <h2 className="card-title">💡 Инсайты</h2>
+              <div className="mood-insights-list">
+                {insights.map((ins, i) => (
+                  <div key={i} className={`mood-insight mood-insight--${ins.trend}`}>
+                    <span className="mood-insight__icon">
+                      {ins.trend === 'up' ? '↑' : ins.trend === 'down' ? '↓' : '●'}
+                    </span>
+                    <span className="mood-insight__text">{ins.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null
+        })()}
 
         <div className="card">
           <h2 className="card-title">🗓️ Календарь настроения</h2>

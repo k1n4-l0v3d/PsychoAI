@@ -186,6 +186,37 @@ func (h *Handler) UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
 }
 
+func (h *Handler) ChangePassword(w http.ResponseWriter, r *http.Request) {
+	userID := GetUserID(r)
+	var req struct {
+		CurrentPassword string `json:"current_password"`
+		NewPassword     string `json:"new_password"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		jsonError(w, "invalid request", http.StatusBadRequest)
+		return
+	}
+	if req.CurrentPassword == "" || req.NewPassword == "" {
+		jsonError(w, "both passwords required", http.StatusBadRequest)
+		return
+	}
+	if len(req.NewPassword) < 6 {
+		jsonError(w, "password too short", http.StatusBadRequest)
+		return
+	}
+	err := h.svc.ChangePassword(r.Context(), userID, req.CurrentPassword, req.NewPassword)
+	if err == ErrWrongPassword {
+		jsonError(w, "current password is incorrect", http.StatusUnauthorized)
+		return
+	}
+	if err != nil {
+		jsonError(w, "internal error", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+}
+
 func jsonError(w http.ResponseWriter, msg string, code int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)

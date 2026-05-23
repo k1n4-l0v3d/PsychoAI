@@ -400,6 +400,24 @@ body {
 .badge-icon { font-size: 24px }
 .badge-label { font-size: 11px; color: var(--text-secondary); text-align: center }
 
+.mood-insights-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px }
+.mood-insight {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 10px;
+  font-size: 14px; line-height: 1.4;
+  border: 1px solid transparent;
+}
+.mood-insight--up { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2) }
+.mood-insight--down { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.18) }
+.mood-insight--neutral { background: var(--accent-subtle); border-color: var(--border) }
+.mood-insight__icon {
+  font-size: 16px; font-weight: 700; flex-shrink: 0; width: 18px; text-align: center;
+}
+.mood-insight--up .mood-insight__icon { color: #22c55e }
+.mood-insight--down .mood-insight__icon { color: #ef4444 }
+.mood-insight--neutral .mood-insight__icon { color: var(--text-secondary); font-size: 8px }
+.mood-insight__text { color: var(--text-primary) }
+
 /* Settings */
 .settings-group { margin-bottom: 28px }
 .settings-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px }
@@ -411,6 +429,11 @@ body {
 }
 .settings-btn:hover { border-color: var(--accent); color: var(--accent) }
 .settings-btn--active { background: var(--accent); border-color: var(--accent); color: white }
+
+.pw-form { display: flex; flex-direction: column; gap: 4px; max-width: 320px }
+.pw-error { font-size: 13px; color: #ef4444; margin: 4px 0 }
+.pw-success { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #22c55e; margin: 4px 0 }
+.pw-submit { margin-top: 8px; align-self: flex-start }
 
 .empty-msg { color: var(--text-muted); font-size: 14px; padding: 20px 0 }
 

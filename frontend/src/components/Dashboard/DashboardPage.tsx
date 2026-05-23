@@ -203,7 +203,7 @@ export default function DashboardPage() {
         </TiltCard>
       </div>
 
-      <div ref={moodRef}>
+      <div ref={moodRef} style={{ perspective: 800 }}>
         <TiltCard className="card" intensity={2} style={{ padding: '20px 24px' }}>
           <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 14, color: 'var(--text-primary)' }}>
             🌡️ Трекер настроения

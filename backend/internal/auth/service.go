@@ -16,6 +16,7 @@ var (
 	ErrInvalidCredentials = errors.New("invalid credentials")
 	ErrEmailTaken         = errors.New("email already taken")
 	ErrInvalidToken       = errors.New("invalid or expired token")
+	ErrWrongPassword      = errors.New("wrong current password")
 )
 
 type User struct {
@@ -124,6 +125,23 @@ func (s *Service) UpdateUser(ctx context.Context, userID, lang, theme string) er
 		`UPDATE users SET lang = $1, theme = $2 WHERE id = $3`,
 		lang, theme, userID,
 	)
+	return err
+}
+
+func (s *Service) ChangePassword(ctx context.Context, userID, currentPassword, newPassword string) error {
+	var hash string
+	err := s.db.QueryRow(ctx, `SELECT password_hash FROM users WHERE id = $1`, userID).Scan(&hash)
+	if err != nil {
+		return err
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(currentPassword)); err != nil {
+		return ErrWrongPassword
+	}
+	newHash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	_, err = s.db.Exec(ctx, `UPDATE users SET password_hash = $1 WHERE id = $2`, string(newHash), userID)
 	return err
 }
 
