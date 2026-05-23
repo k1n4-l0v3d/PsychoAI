@@ -22,6 +22,70 @@ interface Props {
   onClose: () => void
 }
 
+type BreathPhase = 'inhale' | 'hold' | 'exhale'
+
+function getBreathPhase(stepRu: string): BreathPhase {
+  const t = stepRu.toLowerCase()
+  if (t.includes('вдох') || t.includes('inhale')) return 'inhale'
+  if (t.includes('задерж') || t.includes('hold')) return 'hold'
+  return 'exhale'
+}
+
+const PHASE_LABELS: Record<BreathPhase, string> = {
+  inhale: 'Вдох',
+  hold: 'Задержка',
+  exhale: 'Выдох',
+}
+
+const PHASE_BACKGROUNDS: Record<BreathPhase, string> = {
+  inhale: 'rgba(56, 189, 248, 0.15)',
+  hold: 'rgba(139, 92, 246, 0.15)',
+  exhale: 'rgba(34, 197, 94, 0.12)',
+}
+
+const PHASE_SCALES: Record<BreathPhase, number> = {
+  inhale: 1.35,
+  hold: 1.35,
+  exhale: 1.0,
+}
+
+interface BreathingCircleProps {
+  running: boolean
+  done: boolean
+  step: number
+  cycle: number
+  totalCycles: number
+  timeLeft: number
+  stepDurations: number[]
+  steps: { ru: string; en: string }[]
+}
+
+function BreathingCircle({ running, done, step, cycle, totalCycles, timeLeft, stepDurations, steps }: BreathingCircleProps) {
+  const phase = getBreathPhase(steps[step].ru)
+  const isActive = running || done
+  const scale = isActive ? PHASE_SCALES[phase] : 1.0
+  const background = isActive ? PHASE_BACKGROUNDS[phase] : 'rgba(128,128,128,0.08)'
+  const duration = stepDurations[step] ?? 4
+
+  return (
+    <motion.div
+      className={`breathing-circle breathing-circle--${phase}`}
+      animate={{ scale, background }}
+      transition={{ duration, ease: 'easeInOut' }}
+      style={{ opacity: isActive ? 1 : 0.4 }}
+    >
+      <div className="breathing-circle__timer">{String(timeLeft).padStart(2, '0')}</div>
+      {isActive && !done && (
+        <div className="breathing-circle__phase">{PHASE_LABELS[phase]}</div>
+      )}
+      {done && <div className="breathing-circle__phase">Готово ✓</div>}
+      <div className="breathing-circle__cycle">
+        {done ? '' : `Цикл ${cycle} из ${totalCycles}`}
+      </div>
+    </motion.div>
+  )
+}
+
 export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: Props) {
   const { t } = useTranslation()
   const steps = exercise.content.steps
@@ -107,17 +171,21 @@ export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: P
         </h2>
 
         {isBreathing ? (
-          <>
-            <div className="exercise-timer" style={{ opacity: running || done ? 1 : 0.35 }}>{ss}</div>
-            <div className="exercise-cycle-label">
-              {lang === 'ru' ? `Цикл ${cycle} из ${totalCycles}` : `Cycle ${cycle} of ${totalCycles}`}
-            </div>
-          </>
+          <BreathingCircle
+            running={running}
+            done={done}
+            step={step}
+            cycle={cycle}
+            totalCycles={totalCycles}
+            timeLeft={timeLeft}
+            stepDurations={stepDurations!}
+            steps={steps}
+          />
         ) : exercise.duration_sec > 0 ? (
           <div className="exercise-timer" style={{ opacity: running || done ? 1 : 0.35 }}>{mm}:{ss}</div>
         ) : null}
 
-        <div className="exercise-steps">
+        {!isBreathing && <div className="exercise-steps">
           {steps.map((s, i) => (
             <div
               key={i}
@@ -127,7 +195,7 @@ export default function ExerciseTimer({ exercise, lang, onComplete, onClose }: P
               <span>{lang === 'ru' ? s.ru : s.en}</span>
             </div>
           ))}
-        </div>
+        </div>}
 
         <div className="exercise-controls">
           {!done ? (
