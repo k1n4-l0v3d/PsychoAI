@@ -12,4 +12,13 @@ export const darkTheme = {
   '--border': 'rgba(56, 189, 248, 0.18)',
   '--shadow': '0 8px 32px rgba(0, 0, 0, 0.35)',
   '--blur': 'blur(12px)',
+  '--stat-mood-bg': 'rgba(99, 102, 241, 0.13)',
+  '--stat-mood-border': 'rgba(99, 102, 241, 0.32)',
+  '--stat-mood-accent': '#818cf8',
+  '--stat-ex-bg': 'rgba(6, 182, 212, 0.11)',
+  '--stat-ex-border': 'rgba(6, 182, 212, 0.28)',
+  '--stat-ex-accent': '#22d3ee',
+  '--stat-diary-bg': 'rgba(245, 158, 11, 0.10)',
+  '--stat-diary-border': 'rgba(245, 158, 11, 0.28)',
+  '--stat-diary-accent': '#fbbf24',
 }

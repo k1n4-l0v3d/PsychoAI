@@ -12,4 +12,13 @@ export const lightTheme = {
   '--border': 'rgba(3, 105, 161, 0.15)',
   '--shadow': '0 4px 24px rgba(12, 74, 110, 0.08)',
   '--blur': 'blur(8px)',
+  '--stat-mood-bg': 'rgba(99, 102, 241, 0.08)',
+  '--stat-mood-border': 'rgba(99, 102, 241, 0.22)',
+  '--stat-mood-accent': '#4f46e5',
+  '--stat-ex-bg': 'rgba(6, 182, 212, 0.07)',
+  '--stat-ex-border': 'rgba(6, 182, 212, 0.2)',
+  '--stat-ex-accent': '#0891b2',
+  '--stat-diary-bg': 'rgba(245, 158, 11, 0.08)',
+  '--stat-diary-border': 'rgba(245, 158, 11, 0.22)',
+  '--stat-diary-accent': '#b45309',
 }

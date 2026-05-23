@@ -175,7 +175,7 @@ export default function DashboardPage() {
       />
 
       <div className="dashboard-stats" style={{ perspective: 800 }}>
-        <TiltCard className="stat-card">
+        <TiltCard className="stat-card stat-card--mood" onClick={() => navigate('/progress')}>
           <div className="stat-label">Настроение / неделя</div>
           <div className="stat-value">
             {progress?.mood_avg_week ? progress.mood_avg_week.toFixed(1) : '–'}
@@ -187,14 +187,14 @@ export default function DashboardPage() {
               : 'средний балл за 7 дней'}
           </div>
         </TiltCard>
-        <TiltCard className="stat-card">
+        <TiltCard className="stat-card stat-card--ex" onClick={() => navigate('/exercises')}>
           <div className="stat-label">Упражнений выполнено</div>
           <div className="stat-value">
             {progress?.exercises_count !== undefined ? progress.exercises_count : '–'}
           </div>
           <div className="stat-sub">+{progress?.exercises_week ?? 0} за эту неделю</div>
         </TiltCard>
-        <TiltCard className="stat-card">
+        <TiltCard className="stat-card stat-card--diary" onClick={() => navigate('/diary')}>
           <div className="stat-label">Записей в дневнике</div>
           <div className="stat-value">
             {progress?.diary_count !== undefined ? progress.diary_count : '–'}
@@ -204,23 +204,25 @@ export default function DashboardPage() {
       </div>
 
       <div ref={moodRef} style={{ perspective: 800 }}>
-        <TiltCard className="card" intensity={2} style={{ padding: '20px 24px' }}>
+        <TiltCard className="card" intensity={2} style={{ padding: '20px 24px' }} onClick={() => navigate('/progress')}>
           <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 14, color: 'var(--text-primary)' }}>
             🌡️ Трекер настроения
           </div>
-          <MoodCheckIn />
+          <div onClick={e => e.stopPropagation()}>
+            <MoodCheckIn />
+          </div>
         </TiltCard>
       </div>
 
       <div className="dashboard-bottom" style={{ perspective: 1000 }}>
-        <TiltCard className="sessions-card" intensity={3}>
+        <TiltCard className="sessions-card" intensity={3} onClick={() => navigate('/chat', { state: { noAutoLoad: true } })}>
           <div className="sessions-card-header">
             <span className="sessions-card-title">💬 Последние беседы</span>
-            <button className="sessions-card-link" onClick={() => navigate('/chat')}>
+            <button className="sessions-card-link" onClick={e => { e.stopPropagation(); navigate('/chat') }}>
               Все беседы →
             </button>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }} onClick={e => e.stopPropagation()}>
             {sessions.length === 0 && (
               <div className="empty-state">
                 <div className="empty-state__icon">💬</div>
@@ -245,10 +247,12 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-          <button className="sessions-new-btn-dash" onClick={openNewChat}>
-            <Plus size={14} />
-            Начать новую беседу
-          </button>
+          <div onClick={e => e.stopPropagation()}>
+            <button className="sessions-new-btn-dash" onClick={openNewChat}>
+              <Plus size={14} />
+              Начать новую беседу
+            </button>
+          </div>
         </TiltCard>
 
         <TiltCard className="quickstart-card" intensity={3}>

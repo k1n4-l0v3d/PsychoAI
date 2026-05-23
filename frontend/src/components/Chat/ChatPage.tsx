@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { useEffect, useState, useRef, useCallback } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
-import { Plus, Send, Pencil, Trash2, Check, X } from 'lucide-react'
+import { Plus, Send, Pencil, Trash2, Check, X, ChevronDown } from 'lucide-react'
 import api from '../../api/client'
 import MessageBubble from './MessageBubble'
 import ChipSuggestions from './ChipSuggestions'
@@ -40,15 +40,28 @@ export default function ChatPage() {
   const [diaryModal, setDiaryModal] = useState<string | null>(null)
   const [activeExercise, setActiveExercise] = useState<Exercise | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const messagesRef = useRef<HTMLDivElement>(null)
   const editInputRef = useRef<HTMLInputElement>(null)
   const chatInputRef = useRef<HTMLInputElement>(null)
+  const [showScrollBtn, setShowScrollBtn] = useState(false)
+
+  const handleScroll = useCallback(() => {
+    const el = messagesRef.current
+    if (!el) return
+    const distFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight
+    setShowScrollBtn(distFromBottom > 120)
+  }, [])
+
+  const scrollToBottom = () => bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
 
   const location = useLocation()
 
   useEffect(() => {
     api.get<Session[]>('/api/sessions').then(({ data }) => {
       setSessions(data)
-      const targetId = (location.state as { sessionId?: string } | null)?.sessionId
+      const state = location.state as { sessionId?: string; noAutoLoad?: boolean } | null
+      if (state?.noAutoLoad) return
+      const targetId = state?.sessionId
       if (targetId && data.find((s) => s.id === targetId)) {
         loadSession(targetId)
       } else if (data.length > 0) {
@@ -283,16 +296,60 @@ export default function ChatPage() {
       </aside>
 
       <div className="chat-main">
-        <div className="chat-messages">
+        <div className="chat-messages-wrap">
+        <div className="chat-messages" ref={messagesRef} onScroll={handleScroll}>
+          <AnimatePresence>
+            {messages.length === 0 && !streaming && (
+              <motion.div
+                className="chat-empty"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="chat-empty__icon">🧠</div>
+                <div className="chat-empty__title">Начните разговор</div>
+                <div className="chat-empty__sub">
+                  Расскажите, как вы себя чувствуете — я здесь, чтобы выслушать и помочь
+                </div>
+                <div className="chat-empty__prompts">
+                  {['Мне тревожно', 'Как справиться со стрессом?', 'Просто хочу поговорить'].map((p) => (
+                    <button key={p} className="chat-empty__prompt" onClick={() => sendMessage(p)}>
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <AnimatePresence initial={false}>
             {messages.map((msg) => (
               <MessageBubble key={msg.id} message={msg} />
             ))}
           </AnimatePresence>
           {streaming && messages[messages.length - 1]?.content === '' && (
-            <div className="chat-thinking">{t('chat.thinking')}</div>
+            <div className="chat-thinking">
+              <span className="chat-dot" style={{ animationDelay: '0ms' }} />
+              <span className="chat-dot" style={{ animationDelay: '150ms' }} />
+              <span className="chat-dot" style={{ animationDelay: '300ms' }} />
+            </div>
           )}
           <div ref={bottomRef} />
+        </div>
+        <AnimatePresence>
+          {showScrollBtn && (
+            <motion.button
+              className="scroll-down-btn"
+              onClick={scrollToBottom}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.15 }}
+            >
+              <ChevronDown size={18} />
+            </motion.button>
+          )}
+        </AnimatePresence>
         </div>
 
         <ChipSuggestions chips={chips} onChip={handleChip} />

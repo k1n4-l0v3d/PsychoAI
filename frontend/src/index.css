@@ -97,7 +97,17 @@ body {
 .dashboard-greeting-sub { font-size: 13px; color: var(--text-muted); margin-top: 3px }
 .dashboard-streak { background: var(--accent-subtle); border: 1px solid var(--accent); border-radius: 8px; padding: 6px 14px; color: var(--accent); font-size: 13px; font-weight: 500 }
 .dashboard-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px }
-.stat-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 4px }
+.stat-card {
+  border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 4px;
+  cursor: pointer; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+}
+.stat-card--mood   { background: var(--stat-mood-bg);  border-color: var(--stat-mood-border) }
+.stat-card--ex     { background: var(--stat-ex-bg);    border-color: var(--stat-ex-border) }
+.stat-card--diary  { background: var(--stat-diary-bg); border-color: var(--stat-diary-border) }
+.stat-card--mood  .stat-value { color: var(--stat-mood-accent) }
+.stat-card--ex    .stat-value { color: var(--stat-ex-accent) }
+.stat-card--diary .stat-value { color: var(--stat-diary-accent) }
 .stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em }
 .stat-value { font-size: 30px; font-weight: 700; color: var(--text-primary); line-height: 1.1 }
 .stat-value-denom { font-size: 14px; color: var(--text-muted); font-weight: 400 }
@@ -260,7 +270,61 @@ body {
   background: var(--bg-card); border: 1px solid var(--border);
   color: var(--text-primary); border-bottom-left-radius: 4px; backdrop-filter: var(--blur);
 }
-.chat-thinking { color: var(--text-muted); font-size: 13px; padding-left: 4px; font-style: italic }
+.chat-messages-wrap { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column }
+.chat-thinking {
+  display: flex; align-items: center; gap: 5px;
+  padding: 10px 14px; width: fit-content;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px; border-bottom-left-radius: 4px;
+}
+.chat-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--text-muted); display: inline-block;
+  animation: dot-bounce 0.9s infinite ease-in-out;
+}
+@keyframes dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4 }
+  40% { transform: translateY(-6px); opacity: 1 }
+}
+
+.scroll-down-btn {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--text-secondary); border-radius: 20px; padding: 6px 14px;
+  display: flex; align-items: center; gap: 4px;
+  cursor: pointer; font-size: 13px; font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: border-color 0.15s, color 0.15s;
+}
+.scroll-down-btn:hover { border-color: var(--accent); color: var(--accent) }
+
+.message { position: relative }
+.msg-copy-btn {
+  position: absolute; bottom: -6px; left: 6px;
+  opacity: 0; background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--text-muted); border-radius: 6px; padding: 3px 6px;
+  cursor: pointer; transition: opacity 0.15s, color 0.15s;
+  display: flex; align-items: center;
+}
+.message:hover .msg-copy-btn { opacity: 1 }
+.msg-copy-btn:hover { color: var(--accent) }
+
+.chat-empty {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 40px 24px; gap: 12px; pointer-events: none;
+}
+.chat-empty__icon { font-size: 48px; line-height: 1; margin-bottom: 4px }
+.chat-empty__title { font-size: 18px; font-weight: 600; color: var(--text-primary) }
+.chat-empty__sub { font-size: 14px; color: var(--text-secondary); max-width: 300px; line-height: 1.5 }
+.chat-empty__prompts {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  margin-top: 8px; pointer-events: all;
+}
+.chat-empty__prompt {
+  background: var(--accent-subtle); border: 1px solid var(--border);
+  color: var(--text-secondary); border-radius: 20px; padding: 7px 14px;
+  font-size: 13px; cursor: pointer; font-family: inherit; transition: all 0.15s;
+}
+.chat-empty__prompt:hover { border-color: var(--accent); color: var(--accent) }
 .chips-row { display: flex; gap: 8px; flex-wrap: wrap; padding: 8px 20px }
 .chip {
   background: var(--accent-subtle); border: 1px solid var(--border);

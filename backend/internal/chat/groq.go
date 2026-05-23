@@ -89,7 +89,7 @@ func (c *GroqClient) Stream(w io.Writer, flusher http.Flusher, systemPrompt stri
 		}
 
 		if len(chunk.Choices) > 0 {
-			token := chunk.Choices[0].Delta.Content
+			token := stripCJK(chunk.Choices[0].Delta.Content)
 			if token != "" {
 				fullText.WriteString(token)
 				fmt.Fprintf(w, "data: %s\n\n", jsonEscape(token))
@@ -104,4 +104,21 @@ func (c *GroqClient) Stream(w io.Writer, flusher http.Flusher, systemPrompt stri
 func jsonEscape(s string) string {
 	b, _ := json.Marshal(s)
 	return string(b[1 : len(b)-1])
+}
+
+// stripCJK removes CJK and other non-Cyrillic/Latin ideographic characters
+// that occasionally appear as LLM tokenizer artifacts.
+func stripCJK(s string) string {
+	var b strings.Builder
+	for _, r := range s {
+		if (r >= 0x3000 && r <= 0x303F) || // CJK Symbols & Punctuation
+			(r >= 0x3040 && r <= 0x30FF) || // Hiragana & Katakana
+			(r >= 0x4E00 && r <= 0x9FFF) || // CJK Unified Ideographs
+			(r >= 0xF900 && r <= 0xFAFF) || // CJK Compatibility Ideographs
+			(r >= 0xFF00 && r <= 0xFFEF) { // Halfwidth & Fullwidth Forms
+			continue
+		}
+		b.WriteRune(r)
+	}
+	return b.String()
 }

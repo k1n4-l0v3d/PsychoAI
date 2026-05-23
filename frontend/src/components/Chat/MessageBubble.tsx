@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { marked } from 'marked'
+import { Copy, Check } from 'lucide-react'
 
 marked.setOptions({ breaks: true })
 
@@ -7,6 +9,13 @@ interface Message { id: string; role: 'user' | 'assistant'; content: string }
 
 export default function MessageBubble({ message }: { message: Message }) {
   const isAssistant = message.role === 'assistant'
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(message.content)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   return (
     <motion.div
@@ -25,6 +34,11 @@ export default function MessageBubble({ message }: { message: Message }) {
           ))
         )}
       </div>
+      {isAssistant && message.content && (
+        <button className="msg-copy-btn" onClick={handleCopy} title="Копировать">
+          {copied ? <Check size={13} /> : <Copy size={13} />}
+        </button>
+      )}
     </motion.div>
   )
 }
