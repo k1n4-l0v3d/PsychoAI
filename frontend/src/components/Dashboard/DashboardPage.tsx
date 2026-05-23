@@ -8,6 +8,7 @@ import ExerciseTimer from '../Exercises/ExerciseTimer'
 import DiaryEntryModal from '../Chat/DiaryEntryModal'
 import TiltCard from './TiltCard'
 import MoodCheckIn from './MoodCheckIn'
+import CrisisSupport from './CrisisSupport'
 
 interface Session { id: string; title: string; created_at: string }
 interface Exercise {
@@ -236,6 +237,8 @@ export default function DashboardPage() {
           </button>
         </TiltCard>
       </div>
+
+      <CrisisSupport />
 
       <AnimatePresence>
         {activeExercise && (

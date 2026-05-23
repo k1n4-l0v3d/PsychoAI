@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
-  Home, MessageCircle, BookOpen, Dumbbell, Library, TrendingUp, Settings, LogOut, Pin, PinOff
+  Home, MessageCircle, BookOpen, Dumbbell, Library, TrendingUp, Settings, LogOut, Pin, PinOff, Phone
 } from 'lucide-react'
 import { useAuthStore } from '../../store/authStore'
 import { useNavigate } from 'react-router-dom'
@@ -78,6 +78,17 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </div>
+
+      <button className="sidebar-sos" onClick={() => window.open('tel:88002000122')}>
+        <Phone size={18} style={{ flexShrink: 0, color: 'rgba(239,68,68,0.9)' }} />
+        <motion.span
+          animate={{ opacity: expanded ? 1 : 0, x: expanded ? 0 : -4 }}
+          transition={{ delay: 0.05 }}
+          style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}
+        >
+          SOS — помощь
+        </motion.span>
+      </button>
 
       <div className="sidebar-bottom">
         <NavLink to="/settings" className={({ isActive }) =>
