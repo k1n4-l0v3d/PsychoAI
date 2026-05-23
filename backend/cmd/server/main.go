@@ -16,6 +16,7 @@ import (
 	"psychai/internal/auth"
 	"psychai/internal/chat"
 	"psychai/internal/diary"
+	"psychai/internal/mood"
 	"psychai/internal/progress"
 	"psychai/internal/resources"
 	"psychai/internal/tools"
@@ -51,6 +52,7 @@ func main() {
 	toolsHandler := tools.NewHandler(db)
 	resourcesHandler := resources.NewHandler(db, tavilyKey)
 	progressHandler := progress.NewHandler(db)
+	moodHandler := mood.NewHandler(db)
 
 	r := chi.NewRouter()
 
@@ -94,6 +96,10 @@ func main() {
 		r.Get("/api/resources/search", resourcesHandler.Search)
 
 		r.Get("/api/progress", progressHandler.Get)
+
+		r.Post("/api/mood", moodHandler.Upsert)
+		r.Get("/api/mood/today", moodHandler.Today)
+		r.Get("/api/mood/calendar", moodHandler.Calendar)
 	})
 
 	log.Printf("Server listening on :%s", port)
