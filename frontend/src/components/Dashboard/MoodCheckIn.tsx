@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import api from '../../api/client'
 
 const MOODS = [
@@ -42,24 +43,58 @@ export default function MoodCheckIn() {
 
   return (
     <div className="mood-checkin">
-      <div className="mood-checkin__label">
-        {saved ? 'Настроение сегодня отмечено' : 'Как вы себя чувствуете сегодня?'}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={saved ? 'saved' : 'prompt'}
+          className="mood-checkin__label"
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 4 }}
+          transition={{ duration: 0.2 }}
+        >
+          {saved ? 'Настроение сегодня отмечено' : 'Как вы себя чувствуете сегодня?'}
+        </motion.div>
+      </AnimatePresence>
       <div className="mood-checkin__emojis">
-        {MOODS.map(({ score, emoji, label }) => (
-          <button
-            key={score}
-            className={`mood-checkin__btn${selected === score ? ' mood-checkin__btn--active' : ''}`}
-            onClick={() => handleSelect(score)}
-            disabled={loading}
-            title={label}
-          >
-            {emoji}
-            <span>{score}</span>
-          </button>
-        ))}
+        {MOODS.map(({ score, emoji, label }) => {
+          const isActive = selected === score
+          return (
+            <motion.button
+              key={score}
+              className={`mood-checkin__btn${isActive ? ' mood-checkin__btn--active' : ''}`}
+              onClick={() => handleSelect(score)}
+              disabled={loading}
+              title={label}
+              whileHover={{ scale: 1.12, y: -3 }}
+              whileTap={{ scale: 0.9 }}
+              animate={isActive ? { scale: 1.1, y: -3 } : { scale: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+            >
+              <motion.span
+                animate={isActive ? { fontSize: '24px' } : { fontSize: '20px' }}
+                transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                style={{ display: 'block', lineHeight: 1 }}
+              >
+                {emoji}
+              </motion.span>
+              <span>{score}</span>
+            </motion.button>
+          )
+        })}
       </div>
-      {saved && <div className="mood-checkin__saved">✓ Настроение сохранено</div>}
+      <AnimatePresence>
+        {saved && (
+          <motion.div
+            className="mood-checkin__saved"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            ✓ Настроение сохранено
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
